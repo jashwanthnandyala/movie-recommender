@@ -10,7 +10,11 @@ selected_movie = st.selectbox(
     movies_list,
 )
 
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+from sklearn.feature_extraction.text import CountVectorizer
+cv=CountVectorizer(max_features=5000,stop_words='english')
+vectors=cv.fit_transform(movies['tags']).toarray()
+from sklearn.metrics.pairwise import cosine_similarity
+similarity=cosine_similarity(vectors)
 
 
 def recommend(movie):
@@ -30,3 +34,4 @@ if st.button('Recommend'):
     result=recommend(selected_movie)
     for i in result:
         st.write(i)
+
